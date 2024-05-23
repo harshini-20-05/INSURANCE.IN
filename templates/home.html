@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Home</title>
+        <!-- Favicon-->
+        <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> -->
+        <!-- Font Awesome icons (free version)-->
+        <!-- <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script> -->
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" type="text/css" href="{% static 'static/insu.css' %}">
+
+
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand" href="#page-top">INSURANCE.IN</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars ms-1"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li> -->
+                <li class="nav-item"><a class="nav-link" href="#about">Why us</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                <li class="nav-item">
+                    <!-- Update data-bs-target to point to agent_login.html -->
+                    <a class="nav-link" href="{% url 'agent_login' %}">Agent Login</a>
+                </li>
+
+                <li class="nav-item">
+                    <!-- Update data-bs-target to point to agent_login.html -->
+                    <a class="nav-link" href="{% url 'customer_login' %}">Customer Login</a>
+                </li>
+                
+            
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Masthead-->
+<header class="masthead">
+    <div class="container">
+        <div class="masthead-subheading"></div>
+        <div class="masthead-heading-text-uppercase" style="color: darkblue; font-size:xx-large;">Protecting Your Tomorrow, Today.</div>
+        <a class="btn btn-primary btn-xl text-uppercase" href="#services">Tell Me More</a>
+    </div>
+</header>
+
+
+               
+        <section class="page-section" id="services">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Services</h2>
+                    <h3 class="section-subheading text-muted">Explore our range of insurance services designed to provide peace of mind and protect what matters most to you.</h3>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <a href="" ><img src="https://buddymantra.com/wp-content/uploads/2017/02/health-insurance.jpg" alt="Health Insurance" style="height:200px;width:300px;"></a>
+                        <h4 class="my-3">Health Insurance</h4>
+                        <p class="text-muted">Stay protected and prioritize your well-being with our comprehensive health insurance coverage.</p>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <a href=""><img src="https://www.olsoninsurance.org/wp-content/uploads/2018/02/Types-of-property-insurance.jpg" alt="Property Insurance" style="height:200px;width:300px;"></a>
+                        <h4 class="my-3">Property Insurance</h4>
+                        <p class="text-muted">Secure your valuable assets and safeguard your home with our reliable property insurance solutions.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <a href=""><img src="https://lexerudites.com/wp-content/uploads/2020/12/Insurance.png" alt="Motor Insurance" style="height:200px;width:300px;"></a>
+                        <h4 class="my-3">Motor Insurance</h4>
+                        <p class="text-muted">Drive with confidence knowing you're covered against the unexpected with our tailored motor insurance plans.</p>
+                    </div>
+                </div>
+                <div class="list">
+                    
+                    <h5>Hospitals tied up:</h5>
+                        <ul>
+                            <!-- <a href="#">Hospitals List</a>
+                                {% for hospital in hospitals %}
+                                    <li>{{ hospital}}</li>
+                                {% endfor %}
+                             -->
+                        </ul>
+                </div>
+            </div>
+        </section>        
+        <!-- Portfolio Grid-->
+        <section class="page-section bg-light" id="reviews">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">User Reviews</h2>
+                    <h3 class="section-subheading text-muted">See what our customers are saying.</h3>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- Review item 1 -->
+                        <div class="review-item">
+                            <div class="review-caption">
+                                <div class="review-caption-heading">John Doe</div>
+                                <div class="review-caption-subheading text-muted">5 Stars</div>
+                            </div>
+                            <p class="review-text">"Great insurance company! Excellent customer service and competitive rates."</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- Review item 2 -->
+                        <div class="review-item">
+                            <div class="review-caption">
+                                <div class="review-caption-heading">Jane Smith</div>
+                                <div class="review-caption-subheading text-muted">4 Stars</div>
+                            </div>
+                            <p class="review-text">"I've been with them for years. Always reliable and trustworthy."</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- Review item 3 -->
+                        <div class="review-item">
+                            <div class="review-caption">
+                                <div class="review-caption-heading">Alice Johnson</div>
+                                <div class="review-caption-subheading text-muted">5 Stars</div>
+                            </div>
+                            <p class="review-text">"Quick claim processing and hassle-free experience. Highly recommend!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="page-section" id="about">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Why Choose Our Insurance</h2>
+                    <h3 class="section-subheading text-muted">Discover why we're the best choice for your insurance needs.</h3>
+                </div>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://tse1.mm.bing.net/th?id=OIP.jadem2-cv4JsfbVPETQ5mQHaE7&pid=Api&P=0&h=180" alt="..."style="width: 100%; height: 100%; object-fit: cover;" ></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>Personalized Coverage</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">We offer tailored insurance plans to meet your specific needs, ensuring you get the coverage you need at the right price.</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://tse3.mm.bing.net/th?id=OIP.ivk8jfbQhEyuyD-n82Fa5gHaEw&pid=Api&P=0&h=180" alt="..." style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>Exceptional Customer Service</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Our dedicated team is committed to providing you with personalized support and assistance every step of the way, ensuring your peace of mind.</p></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://tse1.mm.bing.net/th?id=OIP.1dxDu7wDQ17qzpAVbsGQsQHaG6&pid=Api&P=0&h=180" alt="..." style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>Comprehensive Coverage</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">With a wide range of insurance products and coverage options, we have everything you need to protect what matters most to you.</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://tse4.mm.bing.net/th?id=OIP.iidDtFWN6YWYYyFyM9GAAwHaHa&pid=Api&P=0&h=180" alt="..." style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>Trusted Reputation</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Backed by years of experience and a strong track record of customer satisfaction, you can trust us to provide reliable insurance solutions.</p></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <!-- Contact-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Contact Us</h2>
+                    <h3 class="section-subheading text-muted">Get in touch with us.</h3>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="contact-item">
+                            <h4 style="color: white;">Head Office</h4>
+                            <p  style="color: white;"><strong style="color: white;">Address:</strong> 123 Main Street, City, Country</p>
+                            <p style="color: white;"><strong style="color: white;">Phone:</strong> +1 (555) 123-4567</p>
+                            <p style="color: white;"><strongstyle="color: white;">Email:</strong> info@insurance.in</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="contact-item">
+                            <h4 style="color: white;">Branch Office 1</h4>
+                            <p style="color: white;"><strong style="color: white;">Address:</strong> 456 Center Street, City, Country</p>
+                            <p style="color: white;"><strong style="color: white;">Phone:</strong> +1 (555) 987-6543</p>
+                            <p style="color: white;"><strong style="color: white;">Email:</strong> branch1@insurance.in</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="contact-item">
+                            <h4 style="color: white;">Branch Office 2</h4>
+                            <p style="color: white;"><strong style="color: white;">Address:</strong> 789 Downtown Ave, City, Country</p>
+                            <p style="color: white;"><strong style="color: white;">Phone:</strong> +1 (555) 321-8765</p>
+                            <p style="color: white;"><strong style="color: white;">Email:</strong> branch2@insurance.in</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer-->
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-start">Copyright &copy; Your Website 2023</div>
+                    <div class="col-lg-4 my-3 my-lg-0">
+                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                        <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="C:\Users\DELL\myproject\project\login\templates\script.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    </body>
+</html>
