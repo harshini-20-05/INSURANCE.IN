@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from home import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -38,7 +38,10 @@ urlpatterns = [
     path('customer_claims',views.customer_claims,name='customer_claims'),
     path('agent_claims',views.agent_claims,name='agent_claims'),
     path('policy_details',views.policy_details,name='policy_details'),
-    path('claim_details',views.claim_details,name='claim_details')
+    path('claim_details',views.claim_details,name='claim_details'),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    # path('payment_success/',views.payment_success,name='payment_success'),
+    path('razorpay/callback/', views.razorpay_callback, name='razorpay_callback'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

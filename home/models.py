@@ -40,11 +40,11 @@ class Claim(models.Model):
         db_table = 'claims'
 
 class Transaction(models.Model):
-    transaction_id = models.BigAutoField(primary_key=True)
+    transaction_id = models.CharField(primary_key=True, max_length=100)
     policy_no = models.ForeignKey('Policy', on_delete=models.CASCADE)
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)  # ForeignKey to Customer model
     amount = models.BigIntegerField()
-    transaction_date = models.DateField()
+    transaction_date = models.DateField(auto_now_add=True) 
 
     class Meta:
         db_table = 'transactions'

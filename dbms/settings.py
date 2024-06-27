@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-s(f7tiq@vhc63ek6o@y)7r+_05$ubyf7ks*8035fi^aqt=-1xo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1',
+    'e6e8-2409-40f2-47-cefe-612b-fb11-b860-a5d4.ngrok-free.app']
 
 
 # Application definition
@@ -39,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'oauth2_provider',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
@@ -49,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'dbms.urls'
@@ -141,3 +146,65 @@ SESSION_COOKIE_SECURE = True
 
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
+
+# RAZORPAY Key 
+RAZOR_PAY_KEY='rzp_test_RgdiNfZ3RYyV75'
+# RAZORPAY_SECRETKEY 
+RAZORPAY_SECRETKEY='lOECjY3W70Gv7TvX9RehnBKo' 
+
+CORS_ALLOWED_ORIGINS = [
+    'https://razorpay.com',  # Replace with your frontend URL
+    'http://localhost:8000',  # Example for local development
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTIONS',
+]
+CORS_ALLOW_HEADERS = [
+    'Accept',
+    'Content-Type',
+    'Authorization',
+    'X-CSRFToken',
+]
+
+# settings.py
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'razorpay_callback.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+# ngrok recover codes 
+# 8Z4GQ8HASY
+# VSBNWBDWYQ
+# HT7AZQ9DWF
+# T9CUZAR9SZ
+# FAUVFNVA3R
+# 792D7R2M54
+# NUGYPJH28J
+# VSW8T45CZU
+# 5VWNEUXTH7
+# AHPTYKWFHQ
+CSRF_TRUSTED_ORIGINS=[
+    'https://e6e8-2409-40f2-47-cefe-612b-fb11-b860-a5d4.ngrok-free.app',
+    'https://api.razorpay.com',
+    'https://e6e8-2409-40f2-47-cefe-612b-fb11-b860-a5d4.ngrok-free.app/razorpay/callback/'
+]

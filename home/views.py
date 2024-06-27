@@ -5,8 +5,11 @@ from .models import Agent, Customer,Claim,Policy,PolicyDetails,Transaction,Claim
 from django.utils import timezone
 from django.db import IntegrityError
 from datetime import timedelta,datetime
+from django.conf import settings
 import logging
+import razorpay
 # Create your views here.
+
 def index(request):
     return render(request,'home.html')
 def agent_login(request):
@@ -24,7 +27,7 @@ def agent_login(request):
             # Agent with the provided agent_id exists
             if password == agent.password:
                 request.session['agent_id'] = agent.agent_id
-                return render(request, 'agent_dashboard.html', {'agent': agent})
+                return redirect('agent_dashboard')
             else:
                 # Password does not match
                 pass
@@ -59,11 +62,26 @@ def customer_login(request):
     return render(request, 'customer_login.html')
  
 def agent_dashboard(request):
-    agent=Agent.objects.get(agent_id=request.session.get('agent_id'))
-    
-    # Pass the customer details to the template
-    context = {'agent': agent}
-    return render(request,'agent_dashboard.html',context)
+    # Retrieve agent ID from session
+    agent_id = request.session.get('agent_id')
+    agent=Agent.objects.get(agent_id=agent_id)
+    claim_count = Policy.objects.filter(agent_id=agent).count()
+    customer_count = Policy.objects.filter(agent_id=agent).values('cust_id').distinct().count()
+
+    # Debug prints
+    print(f"Claim Count: {claim_count}")
+    print(f"Customer Count: {customer_count}")
+
+    # Prepare context for rendering
+    context = {
+        'agent': agent,
+        'claim_count': claim_count,
+        'customer_count': customer_count
+    }
+
+    # Render the template with the context data
+    return render(request, 'agent_dashboard.html', context)
+
 
 
 def customer_dashboard(request):
@@ -277,71 +295,132 @@ def customer_agent_details(request):
     context = {'agents': agents}
     
     return render(request, 'customer_agent_details.html', context)
+
+client = razorpay.Client(auth=(settings.RAZOR_PAY_KEY, settings.RAZORPAY_SECRETKEY))
 def transactions(request):
     if request.method == 'POST':
-        transaction_id = int(request.POST.get('transaction_id'))
-        transaction_date = request.POST.get('transaction_date')
-        policy_number = int(request.POST.get('policy_number'))
-        amount = int(request.POST.get('amount'))
+        policy_number = request.POST.get('policy_number')
+        
+        try:
+            # Validate policy number
+            policy_number = int(policy_number)
+        except ValueError:
+            content = {
+                'content': "Invalid policy number format. Please enter a valid number."
+            }
+            return render(request, 'failure.html', content)
 
         try:
-            
+            # Retrieve policy and policy details
+            policy = Policy.objects.get(policy_no=policy_number)
+            policy_details = PolicyDetails.objects.get(policy_no=policy_number)
+        except Policy.DoesNotExist:
+            content = {
+                'content': "Policy number does not exist."
+            }
+            return render(request, 'failure.html', content)
 
-            # Check if the transaction ID is unique
-            if Transaction.objects.filter(transaction_id=transaction_id).exists():
-                content={
-                    'content':"Invalid transaction ID: Transaction ID must be unique."
-                }
-                return render(request,'failure.html',content)
+        # Check if the policy is expired
+        if policy.status == 'expired':
+            content = {
+                'content': "Policy is expired."
+            }
+            return render(request, 'failure.html', content)
 
-            # Retrieve policy details
-            try:
-                policy = Policy.objects.get(policy_no=policy_number)
-                policy_details = PolicyDetails.objects.get(policy_no=policy_number)
-            except Policy.DoesNotExist and policy.status=='expired':
-                content={
-                    'content':"Policy number does not exist"
-                }
-                return render(request,'failure.html',content)
-
-            # Check if the policy is associated with the customer
+        # Retrieve the customer
+        try:
             customer = Customer.objects.get(cust_id=request.session.get('cust_id'))
-            if policy.cust_id != customer:
-                content={
-                    'content':"You have not taken this policy."
-                }
-                return render(request,'failure.html',content)
+        except Customer.DoesNotExist:
+            content = {
+                'content': "Customer does not exist."
+            }
+            return render(request, 'failure.html', content)
 
-            # Validate the amount
-            if amount == policy_details.amount_to_be_paid:
-                # Create a new transaction record
-                transaction = Transaction.objects.create(
-                    transaction_id=transaction_id,
-                    policy_no=policy,
-                    cust_id=customer,
-                    amount=amount,
-                    transaction_date=transaction_date
-                )
+        # Check if the policy is associated with the customer
+        if policy.cust_id != customer:
+            content = {
+                'content': "You have not taken this policy."
+            }
+            return render(request, 'failure.html', content)
 
-                # Process the transaction (if needed)
-                # (You can add your transaction processing logic here)
-                content={
-                    'content':"Transaction successful"
-                }
-                return render(request,'failure.html',content)
-                
-            else:
-                content={
-                    'content':"Amount does not match the policy details"
-                }
-                return render(request,'failure.html',content)
-        except ValueError:
-            content={
-                    'content':"Invalid input"
-                }
-            return render(request,'failure.html',content)
+        # Amount should be in the smallest currency unit for Razorpay (paisa for INR)
+        
+        amount = int(policy_details.amount_to_be_paid * 100) 
+        data = { "amount": amount, "currency": "INR", "receipt": "order_rcptid_11" ,"payment_capture": '1'}
+        payment = client.order.create(data=data)
+        # payment_details = client.order.create(dict(amount=amount, currency='INR', payment_capture=1))
+        payment_order_id = payment['id']
+        context = {
+            'cust_name': customer.cust_name,
+            'cemail': customer.cemail,
+            'cphone': customer.cphone,
+            'amount': amount,  # Converting back to INR for display purposes
+            'order_id': payment_order_id,
+            'api_key': settings.RAZOR_PAY_KEY,
+            'policy_no':policy_number
+        }
+        request.session['policy_no']=policy_number
+        return render(request, 'transaction_payment.html', context)
+
+    # If not a POST request, render a form to accept policy number
     return render(request, 'transaction_form.html')
 
+
+# views.py
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+import json
+import os
+import hmac
+import hashlib
+import json
+import datetime
+from django.http import HttpResponse, HttpResponseBadRequest
+WEBHOOK_SECRET = 'chittireddy20' # Ensure this environment variable is set
+# This will store the processed event IDs
+processed_event_ids = set()
+from django.http import JsonResponse, HttpResponseBadRequest
+import razorpay
+import json
+@csrf_exempt
+def razorpay_callback(request):
+    def verify_signature(response_data):
+        return client.utility.verify_payment_signature(response_data)
+
+    try:
+        if "razorpay_signature" in request.POST:
+            response_data = {
+                'razorpay_order_id': request.POST.get("razorpay_order_id", ""),
+                'razorpay_payment_id': request.POST.get("razorpay_payment_id", ""),
+                'razorpay_signature': request.POST.get("razorpay_signature", "")
+            }
+
+            if verify_signature(response_data):
+                policy_no=request.session.get('policy_no')
+                cust_id=request.session.get('cust_id')
+                customer=Customer.objects.get(cust_id=cust_id)
+                policy=Policy.objects.get(policy_no=policy_no)
+                policy_details = PolicyDetails.objects.get(policy_no=policy_no)
+                amount = policy_details.amount_to_be_paid
+                razorpay_payment_id= request.POST.get('razorpay_payment_id')
+                transaction = Transaction(
+                    transaction_id=razorpay_payment_id,
+                            policy_no=policy,
+                            cust_id=customer,
+                            amount=amount
+                        )
+                transaction.save()
+                print("Transaction saved successfully")
+
+                return redirect('transaction_details')
+            else:
+                return HttpResponse("Webhook signature verification failed", status=400)
+        else:
+            return HttpResponse("Webhook signature missing", status=400)
+    except Exception as e:
+        return HttpResponse("Error: " + str(e), status=500)
+    
+    
 def transaction_details(request):
     # Retrieve the customer ID from the session
     cust_id = request.session.get('cust_id')
